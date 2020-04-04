@@ -174,7 +174,6 @@
 
     <v-content>
       <v-container>
-          <HelloWorld/>
             <div class="mb-2">
                 Tasks: {{ tasks.length }}. 
                 <span v-if="catTasks.length">Tasks in category: {{ catTasks.length }}</span>

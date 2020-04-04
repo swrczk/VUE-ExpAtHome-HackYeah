@@ -19,7 +19,7 @@
 
                 </div>
 
-                <v-btn absolute top right fab color="orange">
+                <v-btn absolute top right fab color="orange" v-on:click="$emit('savetask', task.id)">
                     <v-icon> bookmark_border</v-icon>
                 </v-btn>
 
@@ -54,7 +54,7 @@
                                 </v-col>
                                     <v-row>
                                     <v-col cols="12" >
-                                        <v-text-field  label="Comment*" hint="Write a few words..."  ></v-text-field>
+                                        <v-text-field  v-model="comment" label="Comment*" hint="Write a few words..."  ></v-text-field>
                                     </v-col>
 
                                 </v-row>
@@ -64,7 +64,7 @@
                         <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                            <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
+                            <v-btn color="blue darken-1" text @click="endTask(task)">Save</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
@@ -103,23 +103,19 @@
         name: 'Tasks',
 
         data: () => ({
-
+            comment:"",
             absolute: true,
-
+            rating:4,
             dialog: false
         }),
         methods: {
             onScroll (e) {
                 this.offsetTop = e.target.scrollTop
             },
-            saveTask: function () {
-                //bus.$emit('saveTask', true) // emit the event to the bus
-                console.log("save")
-            },
-            select: function () {
-                //bus.$emit('saveTask', true) // emit the event to the bus
-                console.log("select")
-            },
+            endTask: function (task) {
+                this.dialog = false;console.log(this.rating)
+                this.$emit('endtask', {id:task.id,score:this.rating,comment: this.comment})
+            }
         },
         props: ['tasks'],
     }

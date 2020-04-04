@@ -77,6 +77,14 @@ func addBind(name string, sch schema.Schema, index resource.Index) (*resource.Re
     return index.Bind(name, sch, s, resource.DefaultConf), s
 }
 
+func middleware(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        w.Header().Set("Access-Control-Allow-Origin", "*")
+        w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Accept")
+        next.ServeHTTP(w, r)
+    })
+}
+
 func main() {
 	index := resource.NewIndex()
     _, assignsS := addBind("assigns", assign, index)
@@ -91,7 +99,7 @@ func main() {
 
 	api, err := rest.NewHandler(index)
 	if err != nil { log.Fatalf("Invalid API configuration: %s", err) }
-	http.Handle("/", api)
+	http.Handle("/", middleware(api))
 	log.Print("Serving API on http://localhost:8888")
 	if err := http.ListenAndServe(":8888", nil); err != nil { log.Fatal(err) }
 }

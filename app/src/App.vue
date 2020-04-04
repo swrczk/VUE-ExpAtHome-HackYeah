@@ -15,8 +15,9 @@
           transition="scale-transition"
           width="60"
         />
-
-        #ExpAtHome
+        <v-card-title class="orange--text darken-2">
+          <h2>#ExpAtHome</h2>
+        </v-card-title>
       </div>
 
     </v-app-bar>

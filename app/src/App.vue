@@ -248,7 +248,15 @@ export default {
           .then(r => { if(r.data.length) { this.user = r.data[0]; this.setSnack("Logged in.") }
             else { this.loginError() } }).catch(e => { this.loginError(e) })
       },
-      setTasks(tasks) { tasks.forEach(function(t) { t.overlay = false }); this.tasks = tasks },
+      setTasks(tasks) {
+          tasks.forEach(function(t) { t.overlay = false })
+          this.tasks = tasks
+          axios.get(this.api + '/users/').then(r => {
+                  var users = {}
+                  r.data.forEach(function(u) { users[u.id] = u.name })
+                  this.tasks.forEach(function(t) { t.username = users[t.added] || '?' })
+              }).catch(e => { this.handler(e) })
+          },
       setCatTasks(tasks) { tasks.forEach(function(t) { t.overlay = false }); this.catTasks = tasks },
       refresh() {
           var handler = this.handler

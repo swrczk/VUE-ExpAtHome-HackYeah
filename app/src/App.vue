@@ -46,6 +46,9 @@
             app
             clipped
     >
+      <User :user="user" />
+      <Level :level="user.level" />
+      <v-divider />
       <v-list>
         <v-list-item
                 v-for="item in items"
@@ -71,7 +74,11 @@
 
 
     <v-content>
-      <HelloWorld/>
+      <v-container>
+          <HelloWorld/>
+          Zadań: {{ tasks.length }}
+          <Tasks :tasks="tasks" />
+        </v-container>
     </v-content>
 
 
@@ -86,12 +93,21 @@
 
 <script>
 import HelloWorld from './components/HelloWorld';
+import User from './components/User';
+import Level from './components/Level';
+import Tasks from './components/Tasks';
+
+import user from './json/user.json';
+import tasks from './json/tasks.json';
 
 export default {
   name: 'App',
 
   components: {
     HelloWorld,
+    User,
+    Level,
+    Tasks
   },
 
   data: () => ({
@@ -101,6 +117,8 @@ export default {
         { title: 'Admin', icon: 'gavel' },
     ],
     nav: null,
+    user: user,
+    tasks: tasks,
   }),
 };
 </script>

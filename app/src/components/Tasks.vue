@@ -4,12 +4,11 @@
             <v-card class="mt-9  pa-2">
                 <div class="d-flex flex-no-wrap "  @click="task.overlay = !task.overlay">
 
-                    <v-col cols="auto">
-                        <v-list-item-avatar
-                                tile
-                                size="80"
-                                color="pink"
-                        ></v-list-item-avatar>
+                    <v-col centre cols="auto">
+
+                        <v-card-text tile size="80" class="orange--text font-weight-bold custom-selector">
+                        +{{task.exp}}
+                        </v-card-text>
                     </v-col>
                     <div>
                         <v-card-title>{{ task.name }}</v-card-title>
@@ -20,7 +19,7 @@
 
                 </div>
 
-                <v-btn absolute top right fab color="pink">
+                <v-btn absolute top right fab color="orange">
                     <v-icon> bookmark_border</v-icon>
                 </v-btn>
 
@@ -91,6 +90,12 @@
         </v-col>
     </v-row>
 </template>
+
+<style >
+    .custom-selector{
+    font-size: 3em;
+    }
+</style>
 
 <script>
     export default {

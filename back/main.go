@@ -52,6 +52,7 @@ var assign = schema.Schema{
 			"updated": schema.UpdatedField,
             "taskid": { Required: true, Validator: &schema.String{ MaxLen: 20 } },
             "userid": { Required: true, Validator: &schema.String{ MaxLen: 20 } },
+            "done": { Required: true, Validator: &schema.Bool{}, Filterable: true, Default: false },
     },
 }
 

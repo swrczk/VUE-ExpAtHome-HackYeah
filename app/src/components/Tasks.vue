@@ -1,6 +1,15 @@
 <template>
     <v-row>
-        <v-col cols="12" sm="12" md="6" lg="4" v-for="(task, t) in tasks" :key="t">
+        <v-col cols="12" sm="12" md="12" lg="12" >
+            <v-text-field 
+                outlined
+                label="Search tasks" 
+                prepend-inner-icon="mdi-magnify"
+                v-model="searchBar" 
+                hide-details="auto" 
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="12" md="6" lg="4" v-for="(task, t) in get" :key="t">
             <v-card class="mt-9  pa-2">
                 <div class="d-flex flex-no-wrap "  @click="task.overlay = !task.overlay">
 
@@ -108,7 +117,8 @@
             comment:"",
             absolute: true,
             rating:4,
-            dialog: false
+            dialog: false,
+            searchBar: ""
         }),
         methods: {
             onScroll (e) {
@@ -120,5 +130,13 @@
             }
         },
         props: ['tasks'],
+        computed: {
+            get: function () {
+                return this.tasks.filter(tasks => {
+                    return tasks.name.toLowerCase().includes(this.searchBar.toLowerCase()) ||  tasks.info.toLowerCase().includes(this.searchBar.toLowerCase())
+                })
+            },
+        },
+        
     }
 </script>

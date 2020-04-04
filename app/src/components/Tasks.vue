@@ -10,7 +10,7 @@
             ></v-text-field>
         </v-col>
         <v-col cols="12" sm="12" md="6" lg="4" v-for="(task, t) in get" :key="t">
-            <v-card class="mt-9  pa-2">
+            <v-card class="mt-9  pa-2" :color="task.done? grey : white">
                 <div class="d-flex flex-no-wrap "  @click="task.overlay = !task.overlay">
 
                     <v-col centre cols="auto">

@@ -1,5 +1,5 @@
 <template>
-    <div class="v-card v-sheet theme--light pa-4">
+    <div class="v-card v-sheet theme--light pa-4" v-if="level">
         <v-layout row wrap class="mb-3">
             <v-flex xs12>
                 <v-icon class="mb-1 ml-2" color="orange"> star</v-icon>

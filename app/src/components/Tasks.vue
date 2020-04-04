@@ -1,5 +1,45 @@
 <template>
     <v-row>
+                <v-dialog v-model="dialog" persistent max-width="600px">
+                    <v-card>
+                        <v-card-title>
+                            <span class="headline">How do you like it?</span>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-container>
+                            {{ dialogTask.name }}
+                                <v-col cols="12" >
+                                <v-row  justify="center">
+
+                                        <v-rating
+                                                v-model="rating"
+                                                background-color="orange lighten-3"
+                                                color="orange"
+                                                large
+                                                required
+                                        ></v-rating>
+                                    </v-row>
+                                </v-col>
+                                    <v-row>
+                                    <v-col cols="12" >
+                                        <v-text-field  v-model="comment" label="Comment*" hint="Write a few words..."  ></v-text-field>
+
+                                        <v-file-input multiple label="Show us your hard work! :)"></v-file-input>
+                                    </v-col>
+
+                                </v-row>
+                            </v-container>
+                            <small>*indicates required field</small>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+                            <v-btn color="blue darken-1" text @click="endTask(dialogTask)">Save</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+
+
         <v-col cols="12" sm="12" md="12" lg="12" >
             <v-text-field 
                 outlined
@@ -31,55 +71,14 @@
                 <v-btn absolute top right fab color="orange" v-on:click="$emit('savetask', task.id)" v-if="logged && !task.onlist">
                     <v-icon> bookmark_border</v-icon>
                 </v-btn>
-
-                <v-dialog v-model="dialog" persistent max-width="600px" 
-                    v-if="logged && (!task.done || task.done == 0)">
-                    <template v-slot:activator="{ on }">
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn text color="green"
-                                   v-on="on">
-                                <v-icon> done</v-icon>
-                            </v-btn>
-                        </v-card-actions>
-                    </template>
-
-                    <v-card>
-                        <v-card-title>
-                            <span class="headline">How do you like it?</span>
-                        </v-card-title>
-                        <v-card-text>
-                            <v-container>
-                                <v-col cols="12" >
-                                <v-row  justify="center">
-
-                                        <v-rating
-                                                v-model="rating"
-                                                background-color="orange lighten-3"
-                                                color="orange"
-                                                large
-                                                required
-                                        ></v-rating>
-                                    </v-row>
-                                </v-col>
-                                    <v-row>
-                                    <v-col cols="12" >
-                                        <v-text-field  v-model="comment" label="Comment*" hint="Write a few words..."  ></v-text-field>
-
-                                        <v-file-input multiple label="Show us your hard work! :)"></v-file-input>
-                                    </v-col>
-
-                                </v-row>
-                            </v-container>
-                            <small>*indicates required field</small>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                            <v-btn color="blue darken-1" text @click="endTask(task)">Save</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn icon color="green"
+                            @click.stop="dialogTask = task; dialog = true"
+                            v-if="logged && (!task.done || task.done == 0)">
+                        <v-icon> done</v-icon>
+                    </v-btn>
+                </v-card-actions>
 
 
 
@@ -119,15 +118,18 @@
             absolute: true,
             rating:4,
             dialog: false,
-            searchBar: ""
+            searchBar: "",
+            dialogTask: {},
         }),
         methods: {
+            log(t) { console.log(t.name) },
             onScroll (e) {
                 this.offsetTop = e.target.scrollTop
             },
             endTask: function (task) {
                 this.dialog = false;console.log(this.rating)
                 this.$emit('endtask', {id:task.id,score:this.rating,comment: this.comment})
+                console.log('Ending task: ', task.name)
             }
         },
         props: ['tasks', 'logged' ],

@@ -214,7 +214,7 @@ export default {
   components: {
     User,
     Level,
-    Tasks
+    Tasks,
   },
 
   methods: {

@@ -1,5 +1,5 @@
 <template>
-    <div class="v-card v-sheet theme--light pa-4" v-if="level">
+    <div class="v-card v-sheet theme--light pa-4" v-if="level>=0">
         <v-layout row wrap class="mb-3">
             <v-flex xs12>
                 <v-icon class="mb-1 ml-2" color="orange"> star</v-icon>
@@ -16,6 +16,13 @@
                 <p class="text-lg-right orange--text pa-2">
                     Needs {{ 100-level%100 }} XP
                 </p>
+            </v-flex>
+        </v-layout>
+    </div>
+    <div class="v-card v-sheet theme--light pa-4" v-else>
+        <v-layout row wrap  class="mb-3 text-center">
+            <v-flex xs12 class="pa-3">
+                Your are so anonymous...<br> If it's your first visit <br> <P class="orange--text">Sign in</p> for more fun.
             </v-flex>
         </v-layout>
     </div>

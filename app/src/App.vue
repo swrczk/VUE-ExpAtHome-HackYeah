@@ -15,32 +15,67 @@
           width="40"
         />
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
+        NAME
       </div>
 
       <v-spacer></v-spacer>
+      <v-toolbar light dense>
+        <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+        <v-toolbar-title>Title</v-toolbar-title>
+
+        <v-spacer></v-spacer>
+
+        <v-btn icon>
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
+
+        <v-btn icon>
+          <v-icon>mdi-heart</v-icon>
+        </v-btn>
+
+        <v-btn icon>
+          <v-icon>mdi-dots-vertical</v-icon>
+        </v-btn>
+      </v-toolbar>
     </v-app-bar>
+    <v-navigation-drawer
+            permanent
+    >
+      <!--<v-list>-->
+        <!--<v-list-item-->
+                <!--v-for="item in items"-->
+                <!--:key="item.title"-->
+                <!--link-->
+        <!--&gt;-->
+          <!--<v-list-item-icon>-->
+            <!--<v-icon>{{ item.icon }}</v-icon>-->
+          <!--</v-list-item-icon>-->
 
-    <v-content>
+          <!--<v-list-item-content>-->
+            <!--<v-list-item-title>{{ item.title }}</v-list-item-title>-->
+          <!--</v-list-item-content>-->
+        <!--</v-list-item>-->
+      <!--</v-list>-->
+
+      <!--<template v-slot:append>-->
+        <!--<div class="pa-2">-->
+          <!--<v-btn block>Logout</v-btn>-->
+        <!--</div>-->
+      <!--</template>-->
+    </v-navigation-drawer>
+
+
       <HelloWorld/>
-    </v-content>
+
+
+    <v-footer>
+      <v-spacer></v-spacer>
+      <div>HackYeah 2020</div>
+    </v-footer>
+
   </v-app>
+
 </template>
 
 <script>

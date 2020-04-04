@@ -256,14 +256,17 @@ export default {
       },
       getTask(id) { var t = this.tasks.find(function(t) { return t.id == id })
         if (t) { return t } else { this.setSnack("Nie znaleziono zadania: " + id) } },
-      selectTask(id) { var t = this.getTask(id); if (t) {
+      selectTask(id) {
+          if (!this.user || !this.user.id) { this.setSnack("You have to log in first.") }
+          var t = this.getTask(id); if (t) {
           if (this.assigns.find(function(a) { return a.taskid == t.id })) {
               this.setSnack("This task is already on the list."); return }
           axios.post(this.api + '/assigns/', { taskid: t.id, userid: this.user.id })
           .then(r => { this.setSnack("Added task '" + t.name + "' to the list."); this.refresh(r) })
           .catch(e => { this.handler(e) }) } },
       doneTask(e) { var t = this.getTask(e.id)
-        if (t) { this.setSnack("Task '" + t.name + "' set as done.") } },
+          if (!this.user || !this.user.id) { this.setSnack("You have to log in first.") }
+          if (t) { this.setSnack("Task '" + t.name + "' set as done.") } },
       setSnack(txt) { this.snackText = txt; this.snack = true },
       loginError(e) { this.setSnack("Invalid user name or password."); if (e) { console.log(e) } },
       addTask() {

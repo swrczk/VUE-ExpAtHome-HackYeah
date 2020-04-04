@@ -1,7 +1,7 @@
 <template>
-    <v-layout row wrap>
-        <v-flex v-for="(task, t) in tasks" :key="t">
-            <v-card class="mb-9">
+    <v-row>
+        <v-col cols="12" sx="12" sm="6" md="4" v-for="(task, t) in tasks" :key="t">
+            <v-card class="mb-9  pa-2">
                 <div class="d-flex flex-no-wrap " v-on:click="select">
 
                     <v-col cols="auto">
@@ -13,7 +13,7 @@
                     </v-col>
                     <div>
                         <v-card-title>{{ task.name }}</v-card-title>
-
+                        <v-card-subtitle bottom>{{ task.autor }}</v-card-subtitle>
                         <v-card-subtitle>{{ task.category }}</v-card-subtitle>
                         <v-card-text>{{ task.info }}</v-card-text>
                     </div>
@@ -31,8 +31,9 @@
                     </v-btn>
                 </v-card-actions>
             </v-card>
-        </v-flex>
-    </v-layout>
+
+        </v-col>
+    </v-row>
 </template>
 
 <script>

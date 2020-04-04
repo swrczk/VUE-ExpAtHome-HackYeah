@@ -21,7 +21,7 @@
 
       <v-spacer></v-spacer>
       <v-toolbar light dense>
-        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click="nav = !nav"></v-app-bar-nav-icon>
 
         <v-toolbar-title>Title</v-toolbar-title>
 
@@ -41,7 +41,8 @@
       </v-toolbar>
     </v-app-bar>
     <v-navigation-drawer
-            permanent
+            :permanent="$vuetify.breakpoint.mdAndUp"
+            v-model="nav"
             app
             clipped
     >
@@ -98,7 +99,8 @@ export default {
         { title: 'Dashboard', icon: 'dashboard' },
         { title: 'Account', icon: 'account_box' },
         { title: 'Admin', icon: 'gavel' },
-    ]
+    ],
+    nav: null,
   }),
 };
 </script>

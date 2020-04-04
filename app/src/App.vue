@@ -274,7 +274,7 @@ export default {
       doneTask(e) { var t = this.getTask(e.id); if (!t) { return }
           if (!this.user || !this.user.id) { this.setSnack("You have to log in first.") }
           var aid = this.assigns.find(function(a) { return a.taskid == t.id })
-          if (aid) { axios.patch(this.api + '/assigns/' + aid, { done: true })
+          if (aid) { axios.patch(this.api + '/assigns/' + aid.id, { done: true })
               .then(r => { this.refresh(r); this.snackDone(t) }).catch(e => { this.handler(e) }) }
           else { axios.post(this.api + '/assigns/', { taskid: t.id, userid: this.user.id, done: true })
           .then(r => { this.refresh(r); this.snackDone(t) }).catch(e => { this.handler(e) }) } },

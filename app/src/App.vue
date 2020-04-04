@@ -106,7 +106,9 @@ export default {
     Level,
     Tasks
   },
-
+  theme: {
+    dark: true,
+  },
   data: () => ({
     items: [
         { title: 'Dashboard', icon: 'dashboard' },

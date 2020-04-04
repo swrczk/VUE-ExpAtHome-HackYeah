@@ -1,8 +1,8 @@
 <template>
     <v-row>
         <v-col cols="12" sm="12" md="6" lg="4" v-for="(task, t) in tasks" :key="t">
-            <v-card class="mb-9  pa-2">
-                <div class="d-flex flex-no-wrap " v-on:click="select">
+            <v-card class="mt-9  pa-2">
+                <div class="d-flex flex-no-wrap "  @click="task.overlay = !task.overlay">
 
                     <v-col cols="auto">
                         <v-list-item-avatar
@@ -27,7 +27,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn text color="green"
-                           @click="task.overlay = !task.overlay">
+                           v-on:click="select">
                         <v-icon> done</v-icon>
                     </v-btn>
                 </v-card-actions>

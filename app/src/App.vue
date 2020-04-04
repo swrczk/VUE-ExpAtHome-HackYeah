@@ -20,6 +20,13 @@
       </div>
 
     </v-app-bar>
+    <v-navigation-drawer v-model="right" right app width="75%">
+        <v-spacer /><v-btn icon @click="right = false"><v-icon>close</v-icon></v-btn>
+        <v-card>
+            <v-card-title>Achievements</v-card-title>
+            <v-card-text><Achievements /></v-card-text>
+        </v-card>
+    </v-navigation-drawer>
     <v-navigation-drawer
             :permanent="$vuetify.breakpoint.mdAndUp"
             v-model="nav"
@@ -29,6 +36,10 @@
       <User :user="user" />
       <Level :level="user.exp" />
       <v-divider />
+      <v-btn v-if="user && user.id" block @click="right = !right" class="mb-3">
+         <v-icon>verified_user</v-icon>
+         Achievements
+       </v-btn>
       <v-btn v-if="user && user.id" block :color="myList ? 'primary' : ''" @click="myList = !myList; catid = -1">
         My list</v-btn>
       <v-list-item-group v-model="catid">
@@ -228,6 +239,7 @@
 import User from './components/User';
 import Level from './components/Level';
 import Tasks from './components/Tasks';
+import Achievements from './components/Achievements';
 
 import tasks from './json/tasks.json';
 
@@ -240,6 +252,7 @@ export default {
     User,
     Level,
     Tasks,
+    Achievements,
   },
 
   methods: {
@@ -347,7 +360,7 @@ export default {
         { title: 'Admin', icon: 'gavel' },
     ],
     myList: false,
-    nav: null,
+    nav: null, right: false,
     user: {},
     tasks: tasks, catTasks: [],
     category: {}, catid: -1, categories: {},

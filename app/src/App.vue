@@ -204,7 +204,6 @@ import User from './components/User';
 import Level from './components/Level';
 import Tasks from './components/Tasks';
 
-import user from './json/user.json';
 import tasks from './json/tasks.json';
 
 import axios from 'axios';
@@ -249,9 +248,11 @@ export default {
           .then(r => { if(r.data.length) { this.user = r.data[0]; this.setSnack("Logged in.") }
             else { this.loginError() } }).catch(e => { this.loginError(e) })
       },
+      setTasks(tasks) { tasks.forEach(function(t) { t.overlay = false }); this.tasks = tasks },
+      setCatTasks(tasks) { tasks.forEach(function(t) { t.overlay = false }); this.catTasks = tasks },
       refresh() {
           var handler = this.handler
-          axios.get(this.api + '/tasks/').then(r => { this.tasks = r.data }).catch(e => { handler(e) })
+          axios.get(this.api + '/tasks/').then(r => { this.setTasks(r.data) }).catch(e => { handler(e) })
           axios.get(this.api + '/categories/').then(r => { this.categories  = r.data; this.category = r.data[0] })
           .catch(e => { handler(e) })
       }
@@ -264,7 +265,7 @@ export default {
         { title: 'Admin', icon: 'gavel' },
     ],
     nav: null,
-    user: user,
+    user: {},
     tasks: tasks, catTasks: [],
     category: {}, catid: -1, categories: {},
     api: 'http://localhost:8888',
@@ -277,7 +278,7 @@ export default {
   watch: {
       catid(id) { var c = this.categories[id]; if (c && c.id) {
               this.category = c
-              axios.get(this.api + '/categories/' + c.id + '/tasks/').then(r => { this.catTasks = r.data })
+              axios.get(this.api + '/categories/' + c.id + '/tasks/').then(r => { this.setCatTasks(r.data) })
                 .catch(e => { this.handler(e) })
           } else { this.category = this.categories[0]; this.catTasks = [] }
       },

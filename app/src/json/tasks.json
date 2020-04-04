@@ -1,5 +1,5 @@
 [
-    { "name": "Sweep some floors", "category": "K", "info": "Clean at least one room floor", "exp": "10", "autor": "User X"},
-    { "name": "That drawer", "category": "K", "info": "Find drawer that you didn't clean for the longest time and make it shine", "exp": "30", "autor": "User Y"},
-    { "name": "Bake some cake", "category": "C", "info": "Pick random recipe that you have enough ingredients at home to make it", "exp": "70", "autor": "User X"}
+    { "name": "Sweep some floors", "category": "#CLEAN", "info": "Clean at least one room floor", "exp": "10", "autor": "User X"},
+    { "name": "That drawer", "category": "#CLEAN", "info": "Find drawer that you didn't clean for the longest time and make it shine", "exp": "30", "autor": "User Y"},
+    { "name": "Bake some cake", "category": "#COOK", "info": "Pick random recipe that you have enough ingredients at home to make it", "exp": "70", "autor": "User X"}
 ]

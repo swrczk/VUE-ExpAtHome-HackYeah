@@ -1,7 +1,8 @@
 <template>
     <div>
-        <span>Twoje doświadczenie: {{ level }} XP</span><br />
-        <span>Twój poziom:</span>
+        <span>Your level: {{ Math.round(level/100) }} lvl</span><br />
+        <span>Your exp: {{ level%100 }} XP</span><br />
+        <span>Exp to next level: {{ 100-level%100 }} XP</span>
     </div>
 </template>
 

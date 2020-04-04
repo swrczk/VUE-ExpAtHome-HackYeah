@@ -10,7 +10,7 @@
             ></v-text-field>
         </v-col>
         <v-col cols="12" sm="12" md="6" lg="4" v-for="(task, t) in get" :key="t">
-            <v-card class="mt-9  pa-2" :color="task.done? grey : white">
+            <v-card class="mt-9  pa-2" :color="task.done==0? grey : white">
                 <div class="d-flex flex-no-wrap "  @click="task.overlay = !task.overlay">
 
                     <v-col centre cols="auto">
@@ -32,7 +32,7 @@
                     <v-icon> bookmark_border</v-icon>
                 </v-btn>
 
-                <v-dialog v-model="dialog" persistent max-width="600px"  v-if="  !task.done">
+                <v-dialog v-model="dialog" persistent max-width="600px"  v-if="task.done==0">
                     <template v-slot:activator="{ on }">
                         <v-card-actions>
                             <v-spacer></v-spacer>

@@ -16,7 +16,7 @@
           width="40"
         />
 
-        NAME
+        #ExpAtHome
       </div>
 
       <v-spacer></v-spacer>

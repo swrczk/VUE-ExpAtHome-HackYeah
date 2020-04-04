@@ -174,20 +174,19 @@
 
     <v-content>
       <v-container>
-            <div class="mb-2">
-                Tasks: {{ tasks.length }}.
-                <span v-if="catTasks.length">Tasks in category: {{ catTasks.length }}</span>
-                <span v-else>No category selected. All tasks are shown.</span>
-            </div>
-            <Tasks :tasks="confirmedCatTasks" v-if="catTasks.length" />
-            <Tasks :tasks="confirmedTasks" v-else />
+            <Tasks :tasks="catTasks.length ? confirmedCatTasks : confirmedTasks"
+                v-on:savetask="selectTask($event)"
+                v-on:endtask="doneTask($event)" />
         </v-container>
     </v-content>
 
 
-    <v-footer>
-      <v-spacer></v-spacer>
-      <div>HackYeah 2020</div>
+    <v-footer app>
+        <span class="mr-1">Tasks: {{ tasks.length }}.</span>
+        <span v-if="catTasks.length">Tasks in category: {{ catTasks.length }}</span>
+        <span v-else>No category selected. All tasks are shown.</span>
+        <v-spacer></v-spacer>
+        <div>HackYeah 2020</div>
     </v-footer>
 
     <v-snackbar v-model="snack" :timeout="5000" :color="snackColor">
@@ -218,6 +217,20 @@ export default {
   },
 
   methods: {
+      getAssigns() {
+          axios.get(this.api + '/users/' + this.user.id + '/tasks/')
+          .then(r => { this.assigns = r.data }).catch(e => { this.handler(e) })
+      },
+      getTask(id) { var t = this.tasks.find(function(t) { return t.id == id })
+        if (t) { return t } else { this.setSnack("Nie znaleziono zadania: " + id) } },
+      selectTask(id) { var t = this.getTask(id); if (t) {
+          if (this.assigns.find(function(a) { return a.id == t.id })) {
+              this.setSnack("This task is already on the list."); return }
+          axios.post(this.api + '/assigns/', { taskid: t.id, userid: this.user.id })
+          .then(r => { this.setSnack("Added task '" + t.name + "' to the list."); this.refresh(r) })
+          .catch(e => { this.handler(e) }) } },
+      doneTask(e) { var t = this.getTask(e.id)
+        if (t) { this.setSnack("Task '" + t.name + "' set as done.") } },
       setSnack(txt) { this.snackText = txt; this.snack = true },
       loginError(e) { this.setSnack("Invalid user name or password."); if (e) { console.log(e) } },
       addTask() {
@@ -240,12 +253,12 @@ export default {
       },
       T(str) { return str },
       handler(e) { console.log(e) },
-      loginButton() { if (this.user && this.user.id) { this.user = {} }
+      loginButton() { if (this.user && this.user.id) { this.user = {}; this.assigns = [] }
         else { this.loginUser = ''; this.loginPass = ''; this.modLogin = true } },
       login(user, pass) {
           this.modLogin = false; if (!user || !pass) { return }
           axios.get(this.api + '/users/?filter={ $and: [ { username: "' + user + '" }, { pass: "' + pass + '" } ] }')
-          .then(r => { if(r.data.length) { this.user = r.data[0]; this.setSnack("Logged in.") }
+          .then(r => { if(r.data.length) { this.user = r.data[0]; this.setSnack("Logged in."); this.getAssigns() }
             else { this.loginError() } }).catch(e => { this.loginError(e) })
       },
       setTasks(tasks) {
@@ -263,6 +276,7 @@ export default {
           axios.get(this.api + '/tasks/').then(r => { this.setTasks(r.data) }).catch(e => { handler(e) })
           axios.get(this.api + '/categories/').then(r => { this.categories  = r.data; this.category = r.data[0] })
           .catch(e => { handler(e) })
+          if (this.user && this.user.id) { this.getAssigns() }
       }
   },
 
@@ -281,6 +295,7 @@ export default {
     modAddTask: false, modAddCategory: false,
     newTask: {}, newCategory: {},
     snack: false, snackText: '', snackColor: 'primary',
+    assigns: [],
   }),
 
   watch: {

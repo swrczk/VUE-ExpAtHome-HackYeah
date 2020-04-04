@@ -4,6 +4,7 @@
       app
       color="primary"
       dark
+      clipped-left
     >
       <div class="d-flex align-center">
         <v-img
@@ -41,6 +42,8 @@
     </v-app-bar>
     <v-navigation-drawer
             permanent
+            app
+            clipped
     >
       <!--<v-list>-->
         <!--<v-list-item-->
@@ -66,7 +69,9 @@
     </v-navigation-drawer>
 
 
+    <v-content>
       <HelloWorld/>
+    </v-content>
 
 
     <v-footer>

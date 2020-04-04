@@ -1,37 +1,38 @@
 <template>
-    <div>
-        <v-card v-for="(task, t) in tasks" :key="t">
+    <v-layout row wrap>
+        <v-flex v-for="(task, t) in tasks" :key="t">
+            <v-card class="mb-9">
+                <div class="d-flex flex-no-wrap " v-on:click="select">
 
-            <div class="d-flex flex-no-wrap " v-on:click="select">
+                    <v-col cols="auto">
+                        <v-list-item-avatar
+                                tile
+                                size="80"
+                                color="pink"
+                        ></v-list-item-avatar>
+                    </v-col>
+                    <div>
+                        <v-card-title>{{ task.name }}</v-card-title>
 
-                <v-col cols="auto">
-                    <v-list-item-avatar
-                            tile
-                            size="80"
-                            color="pink"
-                    ></v-list-item-avatar>
-                </v-col>
-                <div>
-                    <v-card-title>{{ task.name }}</v-card-title>
+                        <v-card-subtitle>{{ task.category }}</v-card-subtitle>
+                        <v-card-text>{{ task.info }}</v-card-text>
+                    </div>
 
-                    <v-card-subtitle>{{ task.category }}</v-card-subtitle>
-                    <v-card-text>{{ task.info }}</v-card-text>
                 </div>
 
-            </div>
-
-            <v-btn absolute top right fab color="pink">
-                <v-icon> bookmark_border</v-icon>
-            </v-btn>
-
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text color="green" @click.prevent="saveTask()">
-                    <v-icon> done</v-icon>
+                <v-btn absolute top right fab color="pink">
+                    <v-icon> bookmark_border</v-icon>
                 </v-btn>
-            </v-card-actions>
-        </v-card>
-    </div>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn text color="green" @click.prevent="saveTask()">
+                        <v-icon> done</v-icon>
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
@@ -41,11 +42,11 @@
 
         data: () => ({}),
         methods: {
-            saveTask :  function () {
+            saveTask: function () {
                 //bus.$emit('saveTask', true) // emit the event to the bus
                 console.log("save")
             },
-            select :  function () {
+            select: function () {
                 //bus.$emit('saveTask', true) // emit the event to the bus
                 console.log("select")
             },

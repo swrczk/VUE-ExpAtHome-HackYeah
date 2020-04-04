@@ -1,7 +1,9 @@
 <template>
-    <v-card>
-        <v-card-title vi-if="user.name">Hi {{ user.name }}!</v-card-title>
-        <v-card-title vi-else>Hello mysterious guy!</v-card-title>
+    <v-card v-if="user.name">
+        <v-card-title>Hi {{ user.name }}!</v-card-title>
+    </v-card>
+    <v-card v-else>
+        <v-card-title >Hello mysterious guy!</v-card-title>
     </v-card>
 </template>
 

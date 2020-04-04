@@ -48,7 +48,7 @@
             clipped
     >
       <User :user="user" />
-      <Level :level="user.level" />
+      <Level :level="user.exp" />
       <v-divider />
       <v-list-item-group v-model="catid">
         <v-list-item

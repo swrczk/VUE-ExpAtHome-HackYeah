@@ -28,11 +28,12 @@
 
                 </div>
 
-                <v-btn absolute top right fab color="orange" v-on:click="$emit('savetask', task.id)" v-if=" !task.onlist">
+                <v-btn absolute top right fab color="orange" v-on:click="$emit('savetask', task.id)" v-if="logged && !task.onlist">
                     <v-icon> bookmark_border</v-icon>
                 </v-btn>
 
-                <v-dialog v-model="dialog" persistent max-width="600px"  v-if="!task.done || task.done == 0">
+                <v-dialog v-model="dialog" persistent max-width="600px" 
+                    v-if="logged && (!task.done || task.done == 0)">
                     <template v-slot:activator="{ on }">
                         <v-card-actions>
                             <v-spacer></v-spacer>
@@ -129,7 +130,7 @@
                 this.$emit('endtask', {id:task.id,score:this.rating,comment: this.comment})
             }
         },
-        props: ['tasks'],
+        props: ['tasks', 'logged' ],
         computed: {
             get: function () {
                 return this.tasks.filter(tasks => {

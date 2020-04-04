@@ -199,7 +199,7 @@
 
     <v-content>
       <v-container>
-            <Tasks :tasks="getTasks"
+            <Tasks :tasks="getTasks" :logged="user && user.id"
                 v-on:savetask="selectTask($event)"
                 v-on:endtask="doneTask($event)" />
         </v-container>
@@ -332,8 +332,12 @@ export default {
           axios.get(this.api + '/tasks/').then(r => { this.setTasks(r.data) }).catch(e => { handler(e) })
           axios.get(this.api + '/categories/').then(r => { this.categories  = r.data; this.category = r.data[0] })
           .catch(e => { handler(e) })
-          if (this.user && this.user.id) { this.getAssigns() }
-      }
+          if (this.user && this.user.id) { this.getAssigns() } },
+      clearList() {
+          var api = this.api; var handler = this.handler
+          this.assigns.forEach(function(a) {
+              axios.delete(api + '/assigns/' + a.id).then(r => { console.log(r) })
+              .catch(e => { handler(e) }) }) },
   },
 
   data: () => ({
@@ -366,10 +370,18 @@ export default {
   },
 
   computed: {
-      confirmedTasks() { return this.tasks.filter(function(t) { return t.confirmed && t.confirmed.length }) },
-      confirmedCatTasks() { return this.catTasks.filter(function(t) { return t.confirmed && t.confirmed.length }) },
+      confirmedTasks() { var tasks = this.tasks.filter(function(t) { return t.confirmed && t.confirmed.length })
+          var onlist = {}; var done = {}
+          this.assigns.forEach(function(a) { onlist[a.taskid] = true; done[a.taskid] = a.done })
+          tasks.forEach(function(t) {
+              if (done[t.id]) { t.done = true } if (onlist[t.id]) { t.onlist = true } })
+          return tasks },
+      // confirmedCatTasks() { return this.catTasks.filter(function(t) { return t.confirmed && t.confirmed.length }) },
+      confirmedCatTasks() {
+          var cat = this.category && this.category.id
+          return this.confirmedTasks.filter(function(t) { return t.catid == cat }) },
       getTasks() { if (this.myList) { return this.makeAssigns }
-        return this.catTasks.length ? this.confirmedCatTasks : this.confirmedTasks },
+        return (this.category && this.category.id) ? this.confirmedCatTasks : this.confirmedTasks },
       makeAssigns() {
           var l = []; var gt = this.getTask
           this.assigns.forEach(function(a) {

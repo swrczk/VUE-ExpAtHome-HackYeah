@@ -28,11 +28,11 @@
 
                 </div>
 
-                <v-btn absolute top right fab color="orange" v-on:click="$emit('savetask', task.id)" v-if="!task.onlist">
+                <v-btn absolute top right fab color="orange" v-on:click="$emit('savetask', task.id)" v-if=" !task.onlist">
                     <v-icon> bookmark_border</v-icon>
                 </v-btn>
 
-                <v-dialog v-model="dialog" persistent max-width="600px" v-if="!task.done" >
+                <v-dialog v-model="dialog" persistent max-width="600px"  v-if="  !task.done">
                     <template v-slot:activator="{ on }">
                         <v-card-actions>
                             <v-spacer></v-spacer>

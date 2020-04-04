@@ -55,6 +55,8 @@
                                     <v-row>
                                     <v-col cols="12" >
                                         <v-text-field  v-model="comment" label="Comment*" hint="Write a few words..."  ></v-text-field>
+
+                                        <v-file-input multiple label="Show us your hard work! :)"></v-file-input>
                                     </v-col>
 
                                 </v-row>

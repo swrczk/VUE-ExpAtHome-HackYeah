@@ -12,7 +12,7 @@
                     </v-col>
                     <div>
                         <v-card-title>{{ task.name }}</v-card-title>
-                        <v-card-subtitle bottom>{{ task.autor }}</v-card-subtitle>
+                        <v-card-subtitle bottom>{{ task.username }}</v-card-subtitle>
                         <v-card-subtitle>{{ task.category }}</v-card-subtitle>
 
                     </div>

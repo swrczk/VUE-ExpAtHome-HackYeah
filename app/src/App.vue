@@ -50,6 +50,8 @@
       <User :user="user" />
       <Level :level="user.exp" />
       <v-divider />
+      <v-btn v-if="user && user.id" block :color="myList ? 'primary' : ''" @click="myList = !myList; catid = -1">
+        My list</v-btn>
       <v-list-item-group v-model="catid">
         <v-list-item
                 v-for="item in categories"
@@ -174,7 +176,7 @@
 
     <v-content>
       <v-container>
-            <Tasks :tasks="catTasks.length ? confirmedCatTasks : confirmedTasks"
+            <Tasks :tasks="getTasks"
                 v-on:savetask="selectTask($event)"
                 v-on:endtask="doneTask($event)" />
         </v-container>
@@ -183,7 +185,8 @@
 
     <v-footer app>
         <span class="mr-1">Tasks: {{ tasks.length }}.</span>
-        <span v-if="catTasks.length">Tasks in category: {{ catTasks.length }}</span>
+        <span v-if="myList">Showing my list of tasks.</span>
+        <span v-else-if="catTasks.length">Tasks in category: {{ catTasks.length }}</span>
         <span v-else>No category selected. All tasks are shown.</span>
         <v-spacer></v-spacer>
         <div>HackYeah 2020</div>
@@ -253,13 +256,14 @@ export default {
       },
       T(str) { return str },
       handler(e) { console.log(e) },
-      loginButton() { if (this.user && this.user.id) { this.user = {}; this.assigns = [] }
+      loginButton() { if (this.user && this.user.id) { this.user = {}; this.assigns = []; this.myList = false }
         else { this.loginUser = ''; this.loginPass = ''; this.modLogin = true } },
       login(user, pass) {
           this.modLogin = false; if (!user || !pass) { return }
           axios.get(this.api + '/users/?filter={ $and: [ { username: "' + user + '" }, { pass: "' + pass + '" } ] }')
-          .then(r => { if(r.data.length) { this.user = r.data[0]; this.setSnack("Logged in."); this.getAssigns() }
-            else { this.loginError() } }).catch(e => { this.loginError(e) })
+          .then(r => { if(r.data.length) { this.user = r.data[0]; this.setSnack("Logged in."); this.getAssigns()}
+            else { this.loginError() } this.loginUser = ''; this.loginPass ='' })
+          .catch(e => { this.loginError(e) })
       },
       setTasks(tasks) {
           tasks.forEach(function(t) { t.overlay = false })
@@ -269,8 +273,15 @@ export default {
                   r.data.forEach(function(u) { users[u.id] = u.name })
                   this.tasks.forEach(function(t) { t.username = users[t.added] || '?' })
               }).catch(e => { this.handler(e) })
-          },
-      setCatTasks(tasks) { tasks.forEach(function(t) { t.overlay = false }); this.catTasks = tasks },
+      },
+      setCatTasks(tasks) { tasks.forEach(function(t) { t.overlay = false });
+          this.catTasks = tasks
+          axios.get(this.api + '/users/').then(r => {
+                  var users = {}
+                  r.data.forEach(function(u) { users[u.id] = u.name })
+                  this.catTasks.forEach(function(t) { t.username = users[t.added] || '?' })
+              }).catch(e => { this.handler(e) })
+      },
       refresh() {
           var handler = this.handler
           axios.get(this.api + '/tasks/').then(r => { this.setTasks(r.data) }).catch(e => { handler(e) })
@@ -286,6 +297,7 @@ export default {
         { title: 'Account', icon: 'account_box' },
         { title: 'Admin', icon: 'gavel' },
     ],
+    myList: false,
     nav: null,
     user: {},
     tasks: tasks, catTasks: [],
@@ -299,7 +311,7 @@ export default {
   }),
 
   watch: {
-      catid(id) { var c = this.categories[id]; if (c && c.id) {
+      catid(id) { this.myList = false; var c = this.categories[id]; if (c && c.id) {
               this.category = c
               axios.get(this.api + '/categories/' + c.id + '/tasks/').then(r => { this.setCatTasks(r.data) })
                 .catch(e => { this.handler(e) })
@@ -310,6 +322,14 @@ export default {
   computed: {
       confirmedTasks() { return this.tasks.filter(function(t) { return t.confirmed && t.confirmed.length }) },
       confirmedCatTasks() { return this.catTasks.filter(function(t) { return t.confirmed && t.confirmed.length }) },
+      getTasks() { if (this.myList) { return this.makeAssigns }
+        return this.catTasks.length ? this.confirmedCatTasks : this.confirmedTasks },
+      makeAssigns() {
+          var l = []; var gt = this.getTask
+          this.assigns.forEach(function(a) {
+              var t = {}; Object.assign(t, gt(a.taskid)); t.done = a.done; l.push(t) })
+          return l
+      }
   },
 
   mounted() {

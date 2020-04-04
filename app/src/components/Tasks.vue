@@ -20,6 +20,9 @@
 
                 </div>
 
+                <v-btn absolute top right fab color="pink">
+                    <v-icon> bookmark_border</v-icon>
+                </v-btn>
 
                 <v-dialog v-model="dialog" persistent max-width="600px">
                     <template v-slot:activator="{ on }">
@@ -66,7 +69,6 @@
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
-
 
 
 

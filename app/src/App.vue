@@ -16,7 +16,7 @@
           width="40"
         />
 
-        NAME
+        #ExpAtHome
       </div>
 
       <v-spacer></v-spacer>
@@ -39,6 +39,7 @@
           <v-icon>mdi-dots-vertical</v-icon>
         </v-btn>
       </v-toolbar>
+
     </v-app-bar>
     <v-navigation-drawer
             :permanent="$vuetify.breakpoint.mdAndUp"
@@ -200,7 +201,6 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
 import User from './components/User';
 import Level from './components/Level';
 import Tasks from './components/Tasks';
@@ -214,7 +214,6 @@ export default {
   name: 'App',
 
   components: {
-    HelloWorld,
     User,
     Level,
     Tasks

@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <v-card-title>{{ user.name }}</v-card-title>
+        <v-card-title>Hi {{ user.name }}!</v-card-title>
     </v-card>
 </template>
 

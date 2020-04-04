@@ -76,7 +76,6 @@
 
     <v-content>
       <v-container>
-          Zadań: {{ tasks.length }}
           <Tasks :tasks="tasks" />
         </v-container>
     </v-content>

@@ -50,6 +50,9 @@
 
       <template v-slot:append>
         <div class="pa-2" v-if="user && user.id && user.admin">
+          <v-btn block @click.stop="newUser = {}; modAddUser = true">Add user...</v-btn>
+        </div>
+        <div class="pa-2" v-if="user && user.id && user.admin">
           <v-btn block @click.stop="newCategory = {}; modAddCategory = true">Add category...</v-btn>
         </div>
         <div class="pa-2" v-if="user && user.id">
@@ -127,6 +130,47 @@
         </v-card>
     </v-dialog>
 
+    <v-dialog persistent v-model="modAddUser" max-width="50%">
+        <v-card>
+            <v-card-title class="headline">Add user</v-card-title>
+            <v-card-text>
+                <v-container>
+                    <v-row>
+                        <v-col cols="12">
+                            <v-text-field v-model="newUser.username" label="Login" required></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12">
+                            <v-text-field v-model="newUser.name" label="User name" required></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12">
+                            <v-text-field type="password" v-model="newUser.pass" label="Password" required></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12">
+                            <v-text-field type="number" suffix=" XP" v-model="newUser.exp" label="Experience" required></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12">
+                            <v-switch v-model="newUser.admin" label="Administrator"></v-switch>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer />
+                <v-btn color="blue darken-1" text @click="modAddUser = false">Close</v-btn>
+                <v-btn color="blue darken-1" text @click="addUser">Add</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+
+
     <v-dialog persistent v-model="modLogin" max-width="50%">
         <v-card>
             <v-card-title class="headline">Log in</v-card-title>
@@ -199,6 +243,13 @@ export default {
   },
 
   methods: {
+      addUser() {
+          this.modAddUser = false
+          if (!this.newUser || !this.newUser.name || !this.newUser.pass) { return }
+          this.newUser.exp = Number(this.newUser.exp) || 0
+          axios.post(this.api + '/users/', this.newUser).then(r => {
+              this.setSnack("New user added."); this.refresh(r) })
+          .catch(e => { this.handler(e) }) },
       getAssigns() {
           axios.get(this.api + '/users/' + this.user.id + '/tasks/')
           .then(r => { this.assigns = r.data }).catch(e => { this.handler(e) })
@@ -206,7 +257,7 @@ export default {
       getTask(id) { var t = this.tasks.find(function(t) { return t.id == id })
         if (t) { return t } else { this.setSnack("Nie znaleziono zadania: " + id) } },
       selectTask(id) { var t = this.getTask(id); if (t) {
-          if (this.assigns.find(function(a) { return a.id == t.id })) {
+          if (this.assigns.find(function(a) { return a.taskid == t.id })) {
               this.setSnack("This task is already on the list."); return }
           axios.post(this.api + '/assigns/', { taskid: t.id, userid: this.user.id })
           .then(r => { this.setSnack("Added task '" + t.name + "' to the list."); this.refresh(r) })
@@ -287,6 +338,7 @@ export default {
     newTask: {}, newCategory: {},
     snack: false, snackText: '', snackColor: 'primary',
     assigns: [],
+    newUser: {}, modAddUser: false,
   }),
 
   watch: {

@@ -243,6 +243,13 @@ export default {
   },
 
   methods: {
+      checkAssigns() { var done = {}; var onlist = {}
+          this.assigns.forEach(function(a) { onlist[a.id] = true; done[a.id] = true })
+          this.tasks.forEach(function(t) {
+              if (done[t.id]) { t.done = true } if (onlist[t.id]) { t.onlist = true } })
+          this.catTasks.forEach(function(t) {
+              if (done[t.id]) { t.done = true } if (onlist[t.id]) { t.onlist = true } })
+      },
       addUser() {
           this.modAddUser = false
           if (!this.newUser || !this.newUser.name || !this.newUser.pass) { return }
@@ -252,7 +259,7 @@ export default {
           .catch(e => { this.handler(e) }) },
       getAssigns() {
           axios.get(this.api + '/users/' + this.user.id + '/tasks/')
-          .then(r => { this.assigns = r.data }).catch(e => { this.handler(e) })
+          .then(r => { this.assigns = r.data; this.checkAssigns() }).catch(e => { this.handler(e) })
       },
       getTask(id) { var t = this.tasks.find(function(t) { return t.id == id })
         if (t) { return t } else { this.setSnack("Nie znaleziono zadania: " + id) } },
@@ -264,9 +271,14 @@ export default {
           axios.post(this.api + '/assigns/', { taskid: t.id, userid: this.user.id })
           .then(r => { this.setSnack("Added task '" + t.name + "' to the list."); this.refresh(r) })
           .catch(e => { this.handler(e) }) } },
-      doneTask(e) { var t = this.getTask(e.id)
+      doneTask(e) { var t = this.getTask(e.id); if (!t) { return }
           if (!this.user || !this.user.id) { this.setSnack("You have to log in first.") }
-          if (t) { this.setSnack("Task '" + t.name + "' set as done.") } },
+          var aid = this.assigns.find(function(a) { return a.taskid == t.id })
+          if (aid) { axios.patch(this.api + '/assigns/' + aid, { done: true })
+              .then(r => { this.refresh(r); this.snackDone(t) }).catch(e => { this.handler(e) }) }
+          else { axios.post(this.api + '/assigns/', { taskid: t.id, userid: this.user.id, done: true })
+          .then(r => { this.refresh(r); this.snackDone(t) }).catch(e => { this.handler(e) }) } },
+      snackDone(t) { this.setSnack("Task '" + t.name + "' set as done.") },
       setSnack(txt) { this.snackText = txt; this.snack = true },
       loginError(e) { this.setSnack("Invalid user name or password."); if (e) { console.log(e) } },
       addTask() {

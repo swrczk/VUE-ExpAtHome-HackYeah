@@ -20,17 +20,55 @@
 
                 </div>
 
-                <v-btn absolute top right fab color="pink">
-                    <v-icon> bookmark_border</v-icon>
-                </v-btn>
 
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn text color="green"
-                           v-on:click="select">
-                        <v-icon> done</v-icon>
-                    </v-btn>
-                </v-card-actions>
+                <v-dialog v-model="dialog" persistent max-width="600px">
+                    <template v-slot:activator="{ on }">
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn text color="green"
+                                   v-on="on">
+                                <v-icon> done</v-icon>
+                            </v-btn>
+                        </v-card-actions>
+                    </template>
+
+                    <v-card>
+                        <v-card-title>
+                            <span class="headline">How do you like it?</span>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-container>
+                                <v-col cols="12" >
+                                <v-row  justify="center">
+
+                                        <v-rating
+                                                v-model="rating"
+                                                background-color="orange lighten-3"
+                                                color="orange"
+                                                large
+                                                required
+                                        ></v-rating>
+                                    </v-row>
+                                </v-col>
+                                    <v-row>
+                                    <v-col cols="12" >
+                                        <v-text-field  label="Comment*" hint="Write a few words..."  ></v-text-field>
+                                    </v-col>
+
+                                </v-row>
+                            </v-container>
+                            <small>*indicates required field</small>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+                            <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+
+
+
 
                 <v-overlay
                         :absolute="absolute"
@@ -60,6 +98,8 @@
         data: () => ({
 
             absolute: true,
+
+            dialog: false
         }),
         methods: {
             onScroll (e) {

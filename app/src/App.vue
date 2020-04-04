@@ -48,7 +48,7 @@
             clipped
     >
       <User :user="user" />
-      <Level :level="user.exp" />
+      <Level :level="user.level" />
       <v-divider />
       <v-list-item-group v-model="catid">
         <v-list-item
@@ -175,7 +175,7 @@
     <v-content>
       <v-container>
             <div class="mb-2">
-                Tasks: {{ tasks.length }}. 
+                Tasks: {{ tasks.length }}.
                 <span v-if="catTasks.length">Tasks in category: {{ catTasks.length }}</span>
                 <span v-else>No category selected. All tasks are shown.</span>
             </div>
@@ -242,7 +242,7 @@ export default {
       handler(e) { console.log(e) },
       loginButton() { if (this.user && this.user.id) { this.user = {} }
         else { this.loginUser = ''; this.loginPass = ''; this.modLogin = true } },
-      login(user, pass) { 
+      login(user, pass) {
           this.modLogin = false; if (!user || !pass) { return }
           axios.get(this.api + '/users/?filter={ $and: [ { username: "' + user + '" }, { pass: "' + pass + '" } ] }')
           .then(r => { if(r.data.length) { this.user = r.data[0]; this.setSnack("Logged in.") }

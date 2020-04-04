@@ -1,54 +1,13 @@
 <template>
     <v-row>
-        <v-col cols="12" sm="12" md="12" lg="12" >
-            <v-text-field 
-                outlined
-                label="Search tasks" 
-                prepend-inner-icon="mdi-magnify"
-                v-model="searchBar" 
-                hide-details="auto" 
-            ></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="12" md="6" lg="4" v-for="(task, t) in get" :key="t">
-            <v-card class="mt-9  pa-2" :color="task.done==0? grey : white">
-                <div class="d-flex flex-no-wrap "  @click="task.overlay = !task.overlay">
-
-                    <v-col centre cols="auto">
-
-                        <v-card-text tile size="80" class="orange--text font-weight-bold custom-selector">
-                        +{{task.exp}}
-                        </v-card-text>
-                    </v-col>
-                    <div>
-                        <v-card-title>{{ task.name }}</v-card-title>
-                        <v-card-subtitle bottom>{{ task.username }}</v-card-subtitle>
-                        <v-card-subtitle>{{ task.category }}</v-card-subtitle>
-
-                    </div>
-
-                </div>
-
-                <v-btn absolute top right fab color="orange" v-on:click="$emit('savetask', task.id)" v-if=" !task.onlist">
-                    <v-icon> bookmark_border</v-icon>
-                </v-btn>
-
-                <v-dialog v-model="dialog" persistent max-width="600px"  v-if="task.done==0">
-                    <template v-slot:activator="{ on }">
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn text color="green"
-                                   v-on="on">
-                                <v-icon> done</v-icon>
-                            </v-btn>
-                        </v-card-actions>
-                    </template>
-
+                <v-dialog v-model="dialog" persistent max-width="600px">
                     <v-card>
                         <v-card-title>
                             <span class="headline">How do you like it?</span>
                         </v-card-title>
                         <v-card-text>
                             <v-container>
+                            {{ dialogTask.name }}
                                 <v-col cols="12" >
                                 <v-row  justify="center">
 
@@ -75,10 +34,51 @@
                         <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                            <v-btn color="blue darken-1" text @click="endTask(task)">Save</v-btn>
+                            <v-btn color="blue darken-1" text @click="endTask(dialogTask)">Save</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
+
+
+        <v-col cols="12" sm="12" md="12" lg="12" >
+            <v-text-field 
+                outlined
+                label="Search tasks" 
+                prepend-inner-icon="mdi-magnify"
+                v-model="searchBar" 
+                hide-details="auto" 
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="12" md="6" lg="4" v-for="(task, t) in get" :key="t">
+            <v-card class="mt-9  pa-2" :color="(task.done && task.done != 0) ? 'grey' : 'white'">
+                <div class="d-flex flex-no-wrap "  @click="task.overlay = !task.overlay">
+
+                    <v-col centre cols="auto">
+
+                        <v-card-text tile size="80" class="orange--text font-weight-bold custom-selector">
+                        +{{task.exp}}
+                        </v-card-text>
+                    </v-col>
+                    <div>
+                        <v-card-title>{{ task.name }}</v-card-title>
+                        <v-card-subtitle bottom>{{ task.username }}</v-card-subtitle>
+                        <v-card-subtitle>{{ task.category }}</v-card-subtitle>
+
+                    </div>
+
+                </div>
+
+                <v-btn absolute top right fab color="orange" v-on:click="$emit('savetask', task.id)" v-if="logged && !task.onlist">
+                    <v-icon> bookmark_border</v-icon>
+                </v-btn>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn icon color="green"
+                            @click.stop="dialogTask = task; dialog = true"
+                            v-if="logged && (!task.done || task.done == 0)">
+                        <v-icon> done</v-icon>
+                    </v-btn>
+                </v-card-actions>
 
 
 
@@ -118,18 +118,21 @@
             absolute: true,
             rating:4,
             dialog: false,
-            searchBar: ""
+            searchBar: "",
+            dialogTask: {},
         }),
         methods: {
+            log(t) { console.log(t.name) },
             onScroll (e) {
                 this.offsetTop = e.target.scrollTop
             },
             endTask: function (task) {
                 this.dialog = false;console.log(this.rating)
                 this.$emit('endtask', {id:task.id,score:this.rating,comment: this.comment})
+                console.log('Ending task: ', task.name)
             }
         },
-        props: ['tasks'],
+        props: ['tasks', 'logged' ],
         computed: {
             get: function () {
                 return this.tasks.filter(tasks => {

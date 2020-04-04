@@ -20,6 +20,13 @@
       </div>
 
     </v-app-bar>
+    <v-navigation-drawer v-model="right" right app width="75%">
+        <v-spacer /><v-btn icon @click="right = false"><v-icon>close</v-icon></v-btn>
+        <v-card>
+            <v-card-title>Achievements</v-card-title>
+            <v-card-text><Achievements /></v-card-text>
+        </v-card>
+    </v-navigation-drawer>
     <v-navigation-drawer
             :permanent="$vuetify.breakpoint.mdAndUp"
             v-model="nav"
@@ -29,6 +36,10 @@
       <User :user="user" />
       <Level :level="user.exp" />
       <v-divider />
+      <v-btn v-if="user && user.id" block @click="right = !right" class="mb-3">
+         <v-icon>verified_user</v-icon>
+         Achievements
+       </v-btn>
       <v-btn v-if="user && user.id" block :color="myList ? 'primary' : ''" @click="myList = !myList; catid = -1">
         My list</v-btn>
       <v-list-item-group v-model="catid">
@@ -199,7 +210,7 @@
 
     <v-content>
       <v-container>
-            <Tasks :tasks="getTasks"
+            <Tasks :tasks="getTasks" :logged="user && user.id"
                 v-on:savetask="selectTask($event)"
                 v-on:endtask="doneTask($event)" />
         </v-container>
@@ -228,6 +239,7 @@
 import User from './components/User';
 import Level from './components/Level';
 import Tasks from './components/Tasks';
+import Achievements from './components/Achievements';
 
 import tasks from './json/tasks.json';
 
@@ -240,6 +252,7 @@ export default {
     User,
     Level,
     Tasks,
+    Achievements,
   },
 
   methods: {
@@ -332,8 +345,12 @@ export default {
           axios.get(this.api + '/tasks/').then(r => { this.setTasks(r.data) }).catch(e => { handler(e) })
           axios.get(this.api + '/categories/').then(r => { this.categories  = r.data; this.category = r.data[0] })
           .catch(e => { handler(e) })
-          if (this.user && this.user.id) { this.getAssigns() }
-      }
+          if (this.user && this.user.id) { this.getAssigns() } },
+      clearList() {
+          var api = this.api; var handler = this.handler
+          this.assigns.forEach(function(a) {
+              axios.delete(api + '/assigns/' + a.id).then(r => { console.log(r) })
+              .catch(e => { handler(e) }) }) },
   },
 
   data: () => ({
@@ -343,7 +360,7 @@ export default {
         { title: 'Admin', icon: 'gavel' },
     ],
     myList: false,
-    nav: null,
+    nav: null, right: false,
     user: {},
     tasks: tasks, catTasks: [],
     category: {}, catid: -1, categories: {},
@@ -366,10 +383,18 @@ export default {
   },
 
   computed: {
-      confirmedTasks() { return this.tasks.filter(function(t) { return t.confirmed && t.confirmed.length }) },
-      confirmedCatTasks() { return this.catTasks.filter(function(t) { return t.confirmed && t.confirmed.length }) },
+      confirmedTasks() { var tasks = this.tasks.filter(function(t) { return t.confirmed && t.confirmed.length })
+          var onlist = {}; var done = {}
+          this.assigns.forEach(function(a) { onlist[a.taskid] = true; done[a.taskid] = a.done })
+          tasks.forEach(function(t) {
+              if (done[t.id]) { t.done = true } if (onlist[t.id]) { t.onlist = true } })
+          return tasks },
+      // confirmedCatTasks() { return this.catTasks.filter(function(t) { return t.confirmed && t.confirmed.length }) },
+      confirmedCatTasks() {
+          var cat = this.category && this.category.id
+          return this.confirmedTasks.filter(function(t) { return t.catid == cat }) },
       getTasks() { if (this.myList) { return this.makeAssigns }
-        return this.catTasks.length ? this.confirmedCatTasks : this.confirmedTasks },
+        return (this.category && this.category.id) ? this.confirmedCatTasks : this.confirmedTasks },
       makeAssigns() {
           var l = []; var gt = this.getTask
           this.assigns.forEach(function(a) {

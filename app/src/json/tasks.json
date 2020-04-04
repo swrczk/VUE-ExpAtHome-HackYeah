@@ -1,3 +1,9 @@
 [
-    { "name": "Przykładowe zadanie", "info": "Przykładowy opis." }
+    { "name": "Przykładowe zadanie", "category": "K", "info": "Przykładowy opis.", "autor": "User X" },
+
+    { "name": "Przykładowe zadanie", "category": "K", "info": "Przykładowy opis.", "autor": "User X"  },
+
+    { "name": "Przykładowe zadanie", "category": "K", "info": "Przykładowy opis.", "autor": "User X"  },
+
+    { "name": "Przykładowe zadanie", "category": "K", "info": "Przykładowy opis.", "autor": "User X"  }
 ]

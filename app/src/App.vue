@@ -306,7 +306,7 @@ export default {
       makeAssigns() {
           var l = []; var gt = this.getTask
           this.assigns.forEach(function(a) {
-              var t = {}; Object.assign(t, gt(a.taskid)); t.done = a.done; l.push(t) })
+              var t = {}; Object.assign(t, gt(a.taskid)); t.done = a.done; t.onlist = true; l.push(t) })
           return l
       }
   },

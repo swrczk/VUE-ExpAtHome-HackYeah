@@ -2,20 +2,20 @@
   <v-app>
     <v-app-bar
       app
-      color="black"
+      color="blue-grey darken-4"
       dark
       clipped-left
     >
       <div class="d-flex align-center">
         <v-img
           alt="Vuetify Logo"
-          class="shrink mr-2"
+          class="shrink mr-2 pa-3"
           contain
           src="logo.png"
           transition="scale-transition"
           width="60"
         />
-        <v-card-title class="orange--text darken-2">
+        <v-card-title class="white--text darken-2">
           <h2>#ExpAtHome</h2>
         </v-card-title>
       </div>

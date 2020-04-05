@@ -19,7 +19,7 @@
             </v-flex>
         </v-layout>
     </div>
-    <div class="v-card v-sheet theme--light pa-4" v-else>
+    <div class="v-card v-sheet theme--light pa-4"  v-else>
         <v-layout row wrap  class="mb-3 text-center">
             <v-flex xs12 class="pa-3">
                 Your are so anonymous...<br> If it's your first visit <br> <P class="orange--text">Sign in</p> for more fun.

@@ -375,7 +375,7 @@ export default {
     tasks: tasks, catTasks: [],
     category: {}, catid: -1, categories: {},
     // api: 'http://localhost:8888',
-    api: 'https://hack-yeah-api.herokuapp.com/',
+    api: 'https://hack-yeah-api.herokuapp.com',
     loginUser: '', loginPass: '', modLogin: false,
     modAddTask: false, modAddCategory: false,
     newTask: {}, newCategory: {},

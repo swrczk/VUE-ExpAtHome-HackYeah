@@ -3,18 +3,18 @@
         <v-layout row wrap class="mb-3">
             <v-flex xs12>
                 <v-icon class="mb-1 ml-2" color="orange"> star</v-icon>
-                {{ level }} lvl
+                {{ level }} XP
             </v-flex>
         </v-layout>
 
         <template class="pa-2">
-            <v-progress-linear value="40"></v-progress-linear>
+            <v-progress-linear :value="level % 100"></v-progress-linear>
         </template>
 
         <v-layout  row wrap class="mb-3">
             <v-flex absolut right xs12>
                 <p class="text-lg-right orange--text pa-2">
-                    Needs {{ 100-level%100 }} XP
+                    {{ 100-level%100 }} XP to next level
                 </p>
             </v-flex>
         </v-layout>

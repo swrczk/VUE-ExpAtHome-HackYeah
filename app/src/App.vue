@@ -257,8 +257,10 @@ export default {
   },
 
   methods: {
+      makeBool(s) { return (s === true || s == 1) ? true : false },
       gotExp(xp) { console.log('Got ', xp, ' XP.', xp.type); this.user.exp += xp || 0
-        axios.patch(this.api + '/users/' + this.user.id, { exp: this.user.exp || 0 }) },
+        axios.patch(this.api + '/users/' + this.user.id,
+            { exp: this.user.exp || 0, admin: makeBool(this.user.admin) }) },
       checkAssigns() { var done = {}; var onlist = {}
           this.assigns.forEach(function(a) { onlist[a.id] = true; done[a.id] = true })
           this.tasks.forEach(function(t) {

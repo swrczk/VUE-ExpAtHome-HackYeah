@@ -27,6 +27,7 @@
             <v-card-title>Achievements</v-card-title>
             <v-card-text><Achievements /></v-card-text>
         </v-card>
+        
     </v-navigation-drawer>
     <v-navigation-drawer
             :permanent="$vuetify.breakpoint.mdAndUp"

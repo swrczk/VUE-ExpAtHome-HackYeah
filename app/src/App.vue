@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar
       app
-      color="primary"
+      color="black"
       dark
       clipped-left
     >
@@ -257,6 +257,7 @@ export default {
   },
 
   methods: {
+      gotExp(xp) { console.log('Got ', xp, ' XP.', xp.type) },
       checkAssigns() { var done = {}; var onlist = {}
           this.assigns.forEach(function(a) { onlist[a.id] = true; done[a.id] = true })
           this.tasks.forEach(function(t) {
@@ -289,9 +290,10 @@ export default {
           if (!this.user || !this.user.id) { this.setSnack("You have to log in first.") }
           var aid = this.assigns.find(function(a) { return a.taskid == t.id })
           if (aid) { axios.patch(this.api + '/assigns/' + aid.id, { done: true })
-              .then(r => { this.refresh(r); this.snackDone(t) }).catch(e => { this.handler(e) }) }
+              .then(r => { this.refresh(r); this.snackDone(t); this.gotExp(t.exp)})
+              .catch(e => { this.handler(e) }) }
           else { axios.post(this.api + '/assigns/', { taskid: t.id, userid: this.user.id, done: true })
-          .then(r => { this.refresh(r); this.snackDone(t) }).catch(e => { this.handler(e) }) } },
+          .then(r => { this.refresh(r); this.snackDone(t); this.gotExp(t.exp) }).catch(e => { this.handler(e) }) } },
       snackDone(t) { this.setSnack("Task '" + t.name + "' set as done.") },
       setSnack(txt) { this.snackText = txt; this.snack = true },
       loginError(e) { this.setSnack("Invalid user name or password."); if (e) { console.log(e) } },

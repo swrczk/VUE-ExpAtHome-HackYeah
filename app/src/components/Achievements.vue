@@ -1,11 +1,7 @@
 <template>
-<<<<<<< HEAD
     <div>
         <v-row >
             <v-col class="text-center" cols="12" sm="3" v-for="(achievement, t) in achievements" :key="t">
-=======
-<div>
->>>>>>> c1fc3aa2fd3db28d6a5e634504458f637394dd67
 
                 <v-avatar color="indigo" v-if="achievement.owned">
                     <v-icon color="white">{{achievement.icon}}</v-icon>
@@ -18,10 +14,6 @@
 
             </v-col>
         </v-row>
-<<<<<<< HEAD
-=======
-    </v-col>
->>>>>>> c1fc3aa2fd3db28d6a5e634504458f637394dd67
     </div>
 </template>
 

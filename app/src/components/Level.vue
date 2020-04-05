@@ -8,13 +8,13 @@
         </v-layout>
 
         <template class="pa-2">
-            <v-progress-linear :value="level % 100"></v-progress-linear>
+            <v-progress-linear :value="level * 100 / nextLevel"></v-progress-linear>
         </template>
 
         <v-layout  row wrap class="mb-3">
             <v-flex absolut right xs12>
                 <p class="text-lg-right orange--text pa-2">
-                    {{ 100-level%100 }} XP to next level
+                    {{ nextLevel - level }} XP to next level
                 </p>
             </v-flex>
         </v-layout>
@@ -35,5 +35,9 @@
         data: () => ({}),
 
         props: ['level'],
+
+        computed: {
+            nextLevel() { return (this.level - (this.level % 100)) + 100 },
+        },
     }
 </script>

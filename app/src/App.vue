@@ -42,7 +42,7 @@
          <v-icon>verified_user</v-icon>
          Achievements
        </v-btn>
-      <v-btn v-if="user && user.id" block :color="myList ? 'primary' : ''" @click="myList = true; catid = -1">
+      <v-btn v-if="user && user.id" block :color="myList ? 'primary' : ''" @click="myList = !myList; catid = -1" class="mb-3">
         My list</v-btn>
       <v-list-item-group v-model="catid">
         <v-list-item
@@ -212,6 +212,9 @@
 
     <v-content>
       <v-container>
+            <v-card v-if="myList && getTasks.length == 0" class="ma-3">
+                <v-card-title>Your list is empty.</v-card-title>
+            </v-card>
             <Tasks :tasks="getTasks" :logged="user && user.id"
                 v-on:savetask="selectTask($event)"
                 v-on:endtask="doneTask($event)" />
@@ -221,7 +224,7 @@
 
     <v-footer app>
         <span class="mr-1">Tasks: {{ tasks.length }}.</span>
-        <span v-if="myList">Showing my list of tasks.</span>
+        <span v-if="myList">Showing your list of tasks.</span>
         <span v-else-if="catTasks.length">Tasks in category: {{ catTasks.length }}</span>
         <span v-else>No category selected. All tasks are shown.</span>
         <v-spacer></v-spacer>

@@ -381,7 +381,7 @@ export default {
   }),
 
   watch: {
-      catid(id) { this.myList = false; var c = this.categories[id]; this.category = c
+      catid(id) { this.myList = false; var c = this.categories[id]; this.category = c || {}
       if (c && c.id) {
               axios.get(this.api + '/categories/' + c.id + '/tasks/').then(r => { this.setCatTasks(r.data) })
                 .catch(e => { this.handler(e) })

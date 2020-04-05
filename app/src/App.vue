@@ -42,7 +42,7 @@
          <v-icon>verified_user</v-icon>
          Achievements
        </v-btn>
-      <v-btn v-if="user && user.id" block :color="myList ? 'primary' : ''" @click="myList = !myList; catid = -1">
+      <v-btn v-if="user && user.id" block :color="myList ? 'primary' : ''" @click="myList = true; catid = -1">
         My list</v-btn>
       <v-list-item-group v-model="catid">
         <v-list-item
@@ -381,8 +381,8 @@ export default {
   }),
 
   watch: {
-      catid(id) { this.myList = false; var c = this.categories[id]; if (c && c.id) {
-              this.category = c
+      catid(id) { this.myList = false; var c = this.categories[id]; this.category = c
+      if (c && c.id) {
               axios.get(this.api + '/categories/' + c.id + '/tasks/').then(r => { this.setCatTasks(r.data) })
                 .catch(e => { this.handler(e) })
           // } else { this.category = this.categories[0]; this.catTasks = [] }

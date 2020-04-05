@@ -1,3 +1,3 @@
 db: back/hyback
 web: npm run serve
-release: npm run build
+release: npm install && npm run build

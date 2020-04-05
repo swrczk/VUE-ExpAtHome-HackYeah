@@ -350,7 +350,7 @@ export default {
       refresh() {
           var handler = this.handler
           axios.get(this.api + '/tasks/').then(r => { this.setTasks(r.data) }).catch(e => { handler(e) })
-          axios.get(this.api + '/categories/').then(r => { this.categories  = r.data; this.category = r.data[0] })
+          axios.get(this.api + '/categories/').then(r => { this.categories  = r.data })
           .catch(e => { handler(e) })
           if (this.user && this.user.id) { this.getAssigns() } },
       clearList() {
@@ -385,7 +385,8 @@ export default {
               this.category = c
               axios.get(this.api + '/categories/' + c.id + '/tasks/').then(r => { this.setCatTasks(r.data) })
                 .catch(e => { this.handler(e) })
-          } else { this.category = this.categories[0]; this.catTasks = [] }
+          // } else { this.category = this.categories[0]; this.catTasks = [] }
+          } else { this.catTasks = [] }
       },
   },
 
@@ -398,7 +399,7 @@ export default {
           return tasks },
       // confirmedCatTasks() { return this.catTasks.filter(function(t) { return t.confirmed && t.confirmed.length }) },
       confirmedCatTasks() {
-          var cat = this.category && this.category.id
+          var cat = this.category ? this.category.id : ''
           return this.confirmedTasks.filter(function(t) { return t.catid == cat }) },
       getTasks() { if (this.myList) { return this.makeAssigns }
         return (this.category && this.category.id) ? this.confirmedCatTasks : this.confirmedTasks },

@@ -12,7 +12,7 @@
   "dependencies": {
     "axios": "^0.21.2",
     "core-js": "^3.6.4",
-    "heroku": "^7.39.2",
+    "heroku": "^8.0.0",
     "serve": "^11.3.0",
     "vue": "^2.6.11",
     "vuetify": "^2.2.11"
